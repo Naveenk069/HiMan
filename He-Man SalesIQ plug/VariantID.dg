@@ -1,0 +1,27 @@
+response = Map();
+productName = "";
+if(session.containsKey("productname"))
+{
+	productName = session.get("productname").get("value").toLowerCase();
+}
+variantMap = {"Key":"Value"};
+if(productName == "")
+{
+	response.put("status","failed");
+	response.put("variantid","");
+	response.put("message","No product name received");
+	return response;
+}
+if(variantMap.containsKey(productName))
+{
+	response.put("status","success");
+	response.put("variantid",variantMap.get(productName));
+	response.put("message","Variant ID resolved successfully");
+}
+else
+{
+	response.put("status","failed");
+	response.put("variantid","");
+	response.put("message","No variant found for: " + productName);
+}
+return response;

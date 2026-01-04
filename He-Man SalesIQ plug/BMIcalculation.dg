@@ -1,0 +1,32 @@
+response = Map();
+height_cm = session.get("height").get("value");
+weight = session.get("weight").get("value");
+if(height_cm == 0)
+{
+	response.put("bmivalue",0);
+	response.put("bmimessage","Invalid height value.");
+	return response;
+}
+height_m = height_cm / 100.0;
+bmi = weight / (height_m * height_m);
+bmi = round(bmi,2);
+msg = "";
+if(bmi < 18.5)
+{
+	msg = "You are Underweight";
+}
+else if(bmi >= 18.5 && bmi < 24.9)
+{
+	msg = "You are Fit";
+}
+else if(bmi >= 25 && bmi < 29.9)
+{
+	msg = "You are Overweight";
+}
+else
+{
+	msg = "You are Obese";
+}
+response.put("bmivalue",bmi);
+response.put("bmimessage",msg);
+return response;

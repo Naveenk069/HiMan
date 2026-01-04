@@ -1,0 +1,63 @@
+response = Map();
+order_id = session.get("orderID").get("value");
+url = "https://<your-shop-name>.myshopify.com/admin/api/2024-10/orders/" + order_id + ".json";
+order_res = invokeurl
+[
+	url :url
+	type :GET
+	connection:"your_connection"
+];
+if(order_res == null || !order_res.containsKey("order"))
+{
+	response.put("orderName","Not Found");
+	return response;
+}
+order = order_res.get("order");
+order_number = order.get("order_number").toString();
+line_item = order.get("line_items").get(0);
+product = line_item.get("name");
+qty = line_item.get("quantity");
+price = line_item.get("price");
+address = "Not Available";
+if(order.containsKey("shipping_address") && order.get("shipping_address") != null)
+{
+	shipping = order.get("shipping_address");
+	address = shipping.get("address1") + ", " + shipping.get("city");
+}
+payment = "Not Available";
+if(order.containsKey("gateway_names") && order.get("gateway_names").size() > 0)
+{
+	payment = order.get("gateway_names").get(0);
+}
+shipping_status = "pending";
+if(order.get("fulfillment_status") != null)
+{
+	shipping_status = order.get("fulfillment_status");
+}
+tracking_url = "Not Available";
+shipped_date = "Not Available";
+delivered_date = "Not Available";
+if(order.containsKey("fulfillments") && order.get("fulfillments").size() > 0)
+{
+	fulfill = order.get("fulfillments").get(0);
+	if(fulfill.get("tracking_url") != null)
+	{
+		tracking_url = fulfill.get("tracking_url");
+	}
+	shipped_date = fulfill.get("created_at");
+	if(shipping_status == "fulfilled")
+	{
+		delivered_date = fulfill.get("updated_at");
+	}
+}
+response.put("orderName",product);
+response.put("orderNumber",order_number);
+response.put("quantity",qty);
+response.put("orderCost",price);
+response.put("shippingAddress",address);
+response.put("trackingUrl",tracking_url);
+response.put("shippingStatus",shipping_status);
+response.put("paymentMode",payment);
+response.put("shippedDate",shipped_date);
+response.put("deliveredDate",delivered_date);
+return response;

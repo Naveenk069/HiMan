@@ -1,0 +1,20 @@
+response = Map();
+email = "";
+if(session.containsKey("email"))
+{
+	email = session.get("email").get("text");
+}
+if(email == "")
+{
+	response.put("status","failed");
+	response.put("message","Email is required");
+	return response;
+}
+otp = RandomNumber(1000000,9999999);
+session.put("generated_otp",otp);
+// Email content
+// subject = "";
+// mailBody = "Hi " + name + "your-text";
+response.put("otp",otp);
+// response.put("message","OTP sent successfully to " + email);
+return response;

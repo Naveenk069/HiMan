@@ -1,0 +1,42 @@
+response = Map();
+orderList = List();
+// 1. Get email from plug input
+email = session.get("email").get("value");
+// 2. Build Shopify URL (use same API version everywhere)
+url = "https://<your-shop-name>.myshopify.com/admin/api/2025-10/orders.json?email=" + email;
+api_response = invokeurl
+[
+	url :url
+	type :GET
+	connection:"<your_connection_name>"
+];
+info "ORDERS_BY_EMAIL → " + api_response.toString();
+
+if(api_response.containsKey("orders"))
+{
+	orders = api_response.get("orders");
+	for each  order in orders
+	{
+		// Order ID as STRING
+		order_id = order.get("id").toString();
+		line_items = order.get("line_items");
+		if(line_items.size() > 0)
+		{
+			first_item = line_items.get(0);
+			item_name = first_item.get("name").toString();
+			qty = first_item.get("quantity").toString();
+			// Optional: show fulfillment status
+			status = if(order.get("fulfillment_status") != null,order.get("fulfillment_status").toString(),"not shipped");
+			display_text = item_name + " (x" + qty + ") - " + status;
+			row = Map();
+			row.put("id",order_id);
+			// must be STRING
+			row.put("text",display_text);
+			// must be STRING
+			orderList.add(row);
+		}
+	}
+}
+
+response.put("orderList",orderList);
+return response;

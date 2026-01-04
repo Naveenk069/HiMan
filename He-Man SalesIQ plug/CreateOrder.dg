@@ -1,0 +1,68 @@
+response = Map();
+name = "";
+email = "";
+phone = "";
+address = "";
+variantid = 0;
+qty = 1;
+if(session.containsKey("name"))
+{
+	name = session.get("name").get("value");
+}
+if(session.containsKey("email"))
+{
+	email = session.get("email").get("value");
+}
+if(session.containsKey("phone"))
+{
+	phone = session.get("phone").get("value");
+}
+if(session.containsKey("address"))
+{
+	address = session.get("address").get("value");
+}
+if(session.containsKey("variantid"))
+{
+	variantid = session.get("variantid").get("value").toLong();
+}
+if(session.containsKey("qty"))
+{
+	qty = session.get("qty").get("value").toLong();
+}
+json_body = "{\"order\":{" + "\"line_items\":[{\"variant_id\":" + variantid + ",\"quantity\":" + qty + "}]," + "\"shipping_address\":{" + "\"first_name\":\"" + name + "\"," + "\"address1\":\"" + address + "\"," + "\"phone\":\"" + phone + "\"}," + "\"email\":\"" + email + "\"," + "\"financial_status\":\"paid\"" + "}}";
+// Debug log
+info "JSON_SENT → " + json_body;
+create_order = invokeurl
+[
+	url :"https://<your-shop-name>.myshopify.com/admin/api/2025-10/orders.json"
+	type :POST
+	body:json_body
+	headers:{"Content-Type":"application/json"}
+	connection:"<your-connection-name>"
+];
+info "RAW_SHOPIFY_RESPONSE → " + create_order.toString();
+if(create_order != null && create_order.containsKey("order"))
+{
+	order_data = create_order.get("order");
+	response.put("status","success");
+	response.put("orderID",order_data.get("id").toString());
+	response.put("orderNumber",order_data.get("name"));
+	response.put("message","Order placed successfully");
+}
+else
+{
+	errorMsg = "";
+	if(create_order != null && create_order.containsKey("errors"))
+	{
+		errorMsg = create_order.get("errors").toString();
+	}
+	else
+	{
+		errorMsg = create_order.toString();
+	}
+	response.put("status","failed");
+	response.put("orderID","");
+	response.put("message","Order creation failed");
+	response.put("error",errorMsg);
+}
+return response;

@@ -1,0 +1,41 @@
+response = Map();
+gender = session.get("gender").get("value");
+age = session.get("age").get("value");
+height = session.get("height").get("value");
+weight = session.get("weight").get("value");
+activity = session.get("activity").get("value");
+bmr = 0;
+if(gender.toLowerCase() == "male")
+{
+	bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+}
+else
+{
+	bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+}
+multiplier = 1.2;
+if(activity == "no_workout")
+{
+	multiplier = 1.2;
+}
+else if(activity == "light")
+{
+	multiplier = 1.375;
+}
+else if(activity == "medium")
+{
+	multiplier = 1.55;
+}
+else if(activity == "high")
+{
+	multiplier = 1.725;
+}
+else if(activity == "very_high")
+{
+	multiplier = 1.9;
+}
+kcal = bmr * multiplier;
+kcal = round(kcal,0);
+response.put("kcal",kcal);
+//add the status of the equation
+return response;

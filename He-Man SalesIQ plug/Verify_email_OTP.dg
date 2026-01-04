@@ -1,0 +1,12 @@
+response = Map();
+emailotp = "";
+visitorotp = "";
+emailotp1 = session.get("emailotp").get("value");
+visitorotp1 = session.get("visitorotp").get("value");
+if(emailotp1 == visitorotp1)
+{
+	otp_status = "OTP verification is Successful";
+}
+response = Map();
+response.put("otpstatus",otp_status);
+return response;

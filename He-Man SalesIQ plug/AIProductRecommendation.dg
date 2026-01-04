@@ -1,0 +1,50 @@
+api_key = "<your-api-key>";
+model_name = "<model-name>";
+headers = Map();
+headers.put("Authorization","Bearer " + api_key);
+headers.put("Content-Type","application/json");
+category = "";
+location = "";
+history = "";
+if(session.contains("category"))
+{
+	category = session.get("category").get("value");
+}
+if(session.contains("location"))
+{
+	location = session.get("location").get("value");
+}
+if(session.contains("pastPurchases"))
+{
+	history = session.get("pastPurchases").get("value");
+}
+prompt = "Act as an AI recommendation engine for He-Man e-commerce. " + "User Category: " + category + ". " + "User Location: " + location + ". " + "Past Purchases: " + history + ". " + "Recommend EXACTLY 3 products from this category in bullet points.";
+prompt_safe = prompt.replaceAll("\"","\\\"");
+jsonRequest = "{" + "\"model\":\"" + model_name + "\"," + "\"messages\":[" + "{\"role\":\"user\",\"content\":\"" + prompt_safe + "\"}" + "]" + "}";
+info "JSON Sent to Groq:";
+info jsonRequest;
+response = invokeurl
+[
+	url :"https://api.groq.com/openai/v1/chat/completions"
+	type :POST
+	parameters:jsonRequest
+	headers:headers
+];
+info "Groq API Response:";
+info response;
+ai_text = "Could not generate recommendations at the moment.";
+if(response.contains("choices"))
+{
+	choice = response.get("choices").get(0);
+	if(choice.contains("message"))
+	{
+		msg = choice.get("message");
+		if(msg.contains("content"))
+		{
+			ai_text = msg.get("content");
+		}
+	}
+}
+output = Map();
+output.put("aiRecommendation",ai_text);
+return output;

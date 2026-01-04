@@ -1,0 +1,57 @@
+response = Map();
+orderid = "";
+reason = "";
+notifyEmail = false;
+restockItems = false;
+if(session.containsKey("orderid"))
+{
+	orderid = session.get("orderid").get("value");
+}
+if(session.containsKey("reason"))
+{
+	reason = session.get("reason").get("value");
+}
+if(session.containsKey("notifyEmail"))
+{
+	notifyEmail = session.get("notifyEmail").get("value");
+}
+if(session.containsKey("restockItems"))
+{
+	restockItems = session.get("restockItems").get("value");
+}
+if(orderid == "")
+{
+	response.put("status","failed");
+	response.put("message","Missing order ID");
+	return response;
+}
+cancelBody = Map();
+cancelBody.put("reason",reason);
+cancelBody.put("email",notifyEmail);
+cancelBody.put("restock",restockItems);
+bodyMap = Map();
+bodyMap.put("order",cancelBody);
+json_body = bodyMap.toString();
+info "CANCEL_JSON → " + json_body;
+cancel_resp = invokeurl
+[
+	url :"https://<your-shop-name>.myshopify.com/admin/api/2025-01/orders/" + orderid + "/cancel.json"
+	type :POST
+	body:json_body
+	headers:{"Content-Type":"application/json"}
+	connection:"<your_connection_name>"
+];
+info "RAW_CANCEL_RESPONSE → " + cancel_resp;
+if(cancel_resp.containsKey("order"))
+{
+	cancelid = cancel_resp.get("order").get("id").toString();
+	response.put("status","success");
+	response.put("cancelid",cancelid);
+	response.put("message","Order cancelled successfully");
+}
+else
+{
+	response.put("status","failed");
+	response.put("message","Cancellation failed: " + cancel_resp.toString());
+}
+return response;
