@@ -3,42 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RiceCafe</title>
+<title>He-Man | Smart Commerce Assistant</title>
 
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #f3f4f6;
-        font-family: "Poppins", sans-serif;
-    }
+:root {
+  --bg-dark: #0b0f1a;
+  --bg-darker: #050714;
+  --accent: #f4a261;
+  --text-light: #ffffff;
+  --text-muted: #cbd5e1;
+  --feature-bg: #d98c55;
+}
 
-    .text {
-        font-size: 48px;
-        font-weight: 700;
-        color: #2c3e50;
-        letter-spacing: 2px;
-        animation: fadeInScale 2.2s ease-in-out infinite alternate;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui, sans-serif;
+}
 
-    @keyframes fadeInScale {
-        0% {
-            opacity: 0.3;
-            transform: scale(0.9);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-    }
+body {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= HEADER ================= */
+header {
+  height: 72px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #000, #0b0f1a);
+}
+
+.logo img {
+  height: 42px;
+}
+
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-left: 28px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: var(--text-light);
+}
+
+/* ================= HERO ================= */
+.hero {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 20px;
+  background: radial-gradient(circle at top, #111827, #050714 70%);
+}
+
+.hero h1 {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 700;
+}
+
+.divider {
+  width: 120px;
+  height: 4px;
+  background: var(--accent);
+  margin: 22px auto;
+  border-radius: 4px;
+}
+
+.hero p {
+  color: var(--text-muted);
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+/* ================= ANIMATED LAUNCH TEXT ================= */
+.launch-text {
+  margin-top: 26px;
+}
+
+.launch-text span {
+  display: block;
+  opacity: 0;
+}
+
+.line-1 {
+  font-size: 22px;
+  font-weight: 600;
+  animation: fadeUp 1.4s ease forwards;
+}
+
+.line-2 {
+  font-size: 20px;
+  margin-top: 6px;
+  animation: fadeUp 1.4s ease forwards;
+  animation-delay: 0.6s;
+}
+
+.line-2 strong {
+  color: #22c55e;
+  text-shadow: 0 0 12px rgba(34,197,94,0.45);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= FEATURE SECTION ================= */
+.feature-section {
+  background: var(--feature-bg);
+  padding: 80px 20px;
+}
+
+.feature-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.feature-text h2 {
+  font-size: 36px;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+.feature-text p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1f2937;
+  margin-bottom: 28px;
+  max-width: 420px;
+}
+
+.feature-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: #f3e7d9;
+  color: #1f2937;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.feature-image img {
+  width: 100%;
+  max-width: 460px;
+  display: block;
+  margin: auto;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  background: var(--bg-darker);
+  text-align: center;
+  padding: 18px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 900px) {
+  header {
+    padding: 0 20px;
+  }
+
+  nav {
+    display: none;
+  }
+
+  .feature-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .feature-text p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 </style>
 </head>
 
 <body>
-    <div class="text">He-Man is Launching soon,Make orders via  SalesIQ ZOBOT!</div>
-    <script>window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}</script><script id="zsiqscript" src="https://salesiq.zohopublic.com/widget?wc=siq960effedc6e3ff67231e439651c135d22ca92a05bc2ebaf1523a16c44c0547b2" defer></script>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <img src="https://i.ibb.co/rGt7MgdP/he-man-logo.png" alt="He-Man Logo">
+  </div>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Catalog</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>It's time for He-Man</h1>
+    <div class="divider"></div>
+    <p>He-Man → One bot. Four heroes. Zero confusion.</p>
+    <p>Everything You Need, in One Place</p>
+
+    <div class="launch-text">
+      <span class="line-1">🚀 He-Man is launching soon</span>
+      <span class="line-2">Place orders directly via <strong>SalesIQ Zobot</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE IMAGE SECTION -->
+<section class="feature-section">
+  <div class="feature-container">
+
+    <div class="feature-text">
+      <h2>Exquisite grains</h2>
+      <p>
+        Handpicked varieties embodying the richness of India's agricultural
+        legacy, each selection promises an unparalleled culinary journey.
+      </p>
+      <a href="#" class="feature-btn">Shop now</a>
+    </div>
+
+    <div class="feature-image">
+      <img
+        src="https://i.ibb.co/6R17cY22/he-man-salesiq.png"
+        alt="He-Man with Zoho SalesIQ"
+      />
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 He-Man · Powered by Zoho SalesIQ
+</footer>
+
+<!-- ZOHO SALESIQ -->
+<script>
+  window.$zoho = window.$zoho || {};
+  $zoho.salesiq = $zoho.salesiq || { ready: function(){} };
+</script>
+<script
+  id="zsiqscript"
+  src="https://salesiq.zohopublic.com/widget?wc=siq960effedc6e3ff67231e439651c135d22ca92a05bc2ebaf1523a16c44c0547b2"
+  defer>
+</script>
+
 </body>
 </html>
